@@ -40,7 +40,7 @@ def get_document():
 
 # get all data per Airport
 @app.route('/LAX_data', methods=['GET'])
-def get_all_documents():
+def get_LAX_documents():
     collection = mongo.db.flight_delays
     documents = [row for row in collection.find({"ORIGIN": "LAX"}, {"ORIGIN": 1,"DEST":1,"_id":0,"FL_DATE":1,
                                                                     "DEP_DELAY":1,"ARR_DELAY":1,"CANCELLED":1,"CANCELLED_STATUS":1,
@@ -51,7 +51,7 @@ def get_all_documents():
 
 # get all data per Airport
 @app.route('/SFO_data', methods=['GET'])
-def get_all_documents():
+def get_SFO_documents():
     collection = mongo.db.flight_delays
     documents = [row for row in collection.find({"ORIGIN": "SFO"}, {"ORIGIN": 1,"DEST":1,"_id":0,"FL_DATE":1,
                                                                     "DEP_DELAY":1,"ARR_DELAY":1,"CANCELLED":1,"CANCELLED_STATUS":1,
@@ -62,7 +62,7 @@ def get_all_documents():
 
 # get all data per Airport
 @app.route('/SAN_data', methods=['GET'])
-def get_all_documents():
+def get_SAN_documents():
     collection = mongo.db.flight_delays
     documents = [row for row in collection.find({"ORIGIN": "SAN"}, {"ORIGIN": 1,"DEST":1,"_id":0,"FL_DATE":1,
                                                                     "DEP_DELAY":1,"ARR_DELAY":1,"CANCELLED":1,"CANCELLED_STATUS":1,
