@@ -26,7 +26,7 @@ We decided to go with one month (December) of each year for all of the fiight de
 
 We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO.
 
-The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](Merged-csv-files-2.csv)
+The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](merged-csv-files-2.csv)
 
 Once we had merged the data the next step was finish clean up and merge it into MongoDB.
 
