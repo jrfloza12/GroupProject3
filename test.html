@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flight Data Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Fetch flight data from the server
+    async function fetchData(airport) {
+      const response = await fetch(`http://127.0.0.1:5000/LAX_data`);
+      const data = await response.json();
+      return data;
+    }
+
+    // Initialize and update the charts
+    async function initializeCharts() {
+      const barChartCanvas = document.getElementById('barChartCanvas').getContext('2d');
+      const lineChartCanvas = document.getElementById('lineChartCanvas').getContext('2d');
+      const pieChartCanvas = document.getElementById('pieChartCanvas').getContext('2d');
+
+      const dropdown = document.getElementById('airportDropdown');
+      let selectedAirport = dropdown.value; // Default airport
+
+      // Function to update the charts based on the selected airport
+      async function updateCharts() {
+        selectedAirport = dropdown.value;
+        const flightData = await fetchData(selectedAirport);
+
+        // Bar Chart
+        const years = flightData.map(entry => entry.FL_DATE.split('/')[2]);
+        const delays = flightData.map(entry => entry.DEP_DELAY);
+
+        const barChart = new Chart(barChartCanvas, {
+          type: 'bar',
+          data: {
+            labels: years,
+            datasets: [{
+              label: 'Number of Delays',
+              data: delays,
+              backgroundColor: 'rgba(0, 123, 255, 0.4)',
+              borderColor: 'rgba(0, 123, 255, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Number of Delays'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Year'
+                }
+              }
+            }
+          }
+        });
+
+        // Line Chart
+        const lineChartData = flightData.map(entry => ({
+          x: new Date(entry.FL_DATE),
+          y: entry.ARR_DELAY
+        }));
+
+        const lineChart = new Chart(lineChartCanvas, {
+          type: 'line',
+          data: {
+            datasets: [{
+              label: 'Delay Times',
+              data: lineChartData,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              fill: false
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                title: {
+                  display: true,
+                  text: 'Delay Time'
+                }
+              },
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'month'
+                },
+                title: {
+                  display: true,
+                  text: 'Date'
+                }
+              }
+            }
+          }
+        });
+
+        // Pie Chart
+        const onTimeCount = flightData.filter(entry => entry.DELAYED_STATUS === 'NO').length;
+        const delayedCount = flightData.filter(entry => entry.DELAYED_STATUS === 'YES').length;
+        const cancelledCount = flightData.filter(entry => entry.CANCELLED === 1).length;
+
+        const pieChart = new Chart(pieChartCanvas, {
+          type: 'pie',
+          data: {
+            labels: ['On Time', 'Delayed', 'Cancelled'],
+            datasets: [{
+              data: [onTimeCount, delayedCount, cancelledCount],
+              backgroundColor: ['rgba(0, 255, 0, 0.4)', 'rgba(255, 0, 0, 0.4)', 'rgba(255, 255, 0, 0.4)'],
+              borderColor: ['rgba(0, 255, 0, 1)', 'rgba(255, 0, 0, 1)', 'rgba(255, 255, 0, 1)'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+          }
+        });
+      }
+
+      // Event listener for dropdown change
+      dropdown.addEventListener('change', updateCharts);
+
+      // Initial chart rendering
+      updateCharts();
+    }
+  </script>
+</head>
+<body>
+  <h1>Flight Data Visualization</h1>
+
+  <div>
+    <label for="airportDropdown">Select Airport:</label>
+    <select id="airportDropdown">
+      <option value="LAX">LAX</option>
+      <option value="SFO">SFO</option>
+      <option value="SAN">SAN</option>
+    </select>
+  </div>
+
+  <canvas id="barChartCanvas"></canvas>
+  <canvas id="lineChartCanvas"></canvas>
+  <canvas id="pieChartCanvas"></canvas>
+
+  <script>
+    initializeCharts();
+  </script>
+</body>
+</html>
