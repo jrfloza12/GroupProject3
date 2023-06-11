@@ -15,17 +15,17 @@ To acquire and interpret the data we had to chart the following “ ”steps:
 
 We collected the data from the following site <a href="https://data.bts.gov/" target="_blank">Bureau of Transportation statistics</a>. The site had the ability to download a csv file which we were able to create our initial  dataframe.
 
-The greatest challenge with the CSV file was the amount of data it contained since we could not filter it by the airlines selected prior to this. Due to this obstacle, and the amount of data that was allowed, we downloaded four separate csv files by year.  [a relative link](T_ONTIME_MARKETING_2018.csv), `T_ONTIME_MARKETING_2019.csv`, `T_ONTIME_MARKETING_2020.csv`, `T_ONTIME_MARKETING_2022.csv` 
+The greatest challenge with the CSV file was the amount of data it contained since we could not filter it by the airlines selected prior to this. Due to this obstacle, and the amount of data that was allowed, we downloaded four separate csv files by year.  [2018 csv](T_ONTIME_MARKETING_2018.csv), [2019 csv](T_ONTIME_MARKETING_2019.csv), [2020 csv](T_ONTIME_MARKETING_2020.csv), [2022 csv](T_ONTIME_MARKETING_2022.csv) 
 
 We decided to go with one month (December) of each year for all of the fiight departing out of those three airports. This still created a CSV with over one million rows. 
 
 We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO.
 
-The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  `Merged-csv-files.csv`
+The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](Merged-csv-files.csv)
 
 Once we had merged the data the next step was finish clean up and merge it into MongoDB.
 
-Using Jupyter Notebook and the Pandas module, we created the data frame flightdelays_df from the merged CSV file. We manipulated the data by turning the YES and NOs into 1s and 0s. Pandas also allowed us to create a list of dictionaries for an easy transition into Mongo Db as a collection of documents. We also cleaned the data by scrubbing blank or NA columns. This allowed us to get as much condensed and accurate information as possible into the Mongo Data Base. `Project3ELT.ipynb`
+Using Jupyter Notebook and the Pandas module, we created the data frame flightdelays_df from the merged CSV file. We manipulated the data by turning the YES and NOs into 1s and 0s. Pandas also allowed us to create a list of dictionaries for an easy transition into Mongo Db as a collection} of documents. We also cleaned the data by scrubbing blank or NA columns. This allowed us to get as much condensed and accurate information as possible into the Mongo Data Base. [Jupyter Notebook File](Project3ELT.ipynb)
 
 We selected Mongo due to its versality with JSON and the visualizations that we require for this assignment.
 
@@ -48,9 +48,9 @@ With our teacher's contribution, we created a code that collected the key values
 
 If the document found the key values of the selected airport, it would return a unified document. We decided to create one API for each airport.
 
-The finished the Flask with the name and app run.
+Then finished the Flask with the name and app run.
 
-``Project3Flask.py`
+[Flask App](Project3Flask.py)
 
 
 
