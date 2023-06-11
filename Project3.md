@@ -1,5 +1,10 @@
 # README_Project3
 
+![image](https://github.com/jrfloza12/GroupProject3/assets/122821004/ef7fe1a2-41ec-41f4-8198-053ddd448274)
+
+
+
+
 Project Description: 
 How much has our travel time changed in the last few years?
 With the slowdown of travel during and the increase after COVID, how much did it impact this option for travel?
@@ -21,7 +26,7 @@ We decided to go with one month (December) of each year for all of the fiight de
 
 We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO.
 
-The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](Merged-csv-files.csv)
+The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](Merged-csv-files-2.csv)
 
 Once we had merged the data the next step was finish clean up and merge it into MongoDB.
 
