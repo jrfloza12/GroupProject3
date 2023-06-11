@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.min.js" integrity="sha512-mlz/Fs1VtBou2TrUkGzX4VoGvybkD9nkeXWJm3rle0DPHssYYx4j+8kIS15T78ttGfmOjH0lLaBXGcShaVkdkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   
 </head>
 
@@ -26,7 +26,11 @@
       <div class="col-md-5">
         <div class="well">
           <h5>Select Airline:</h5>
-          <select id="selDataset" onchange="optionChanged(this.value)"></select>
+          <select>
+            <option>LAX</option>
+            <option>SFO</option>
+            <option>SAN</option>
+          </select>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -49,7 +53,7 @@
     </div>
   </div>
 
-  <script src="./app/app.js"></script>
+  <script src="./app.js"></script>
 
   
   
