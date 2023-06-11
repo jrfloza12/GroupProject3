@@ -51,7 +51,9 @@ Our API start point was the app.route, defined as a home with the response/ avai
 
 With our teacher's contribution, we created a code that collected the key values in the rows of the Mongo data and defined it as a get_document.
 
-If the document found the key values of the selected airport, it would return a unified document. We decided to create one API for each airport.
+If the document found the key values of the selected airport, it would return a unified document. We decided to create one API for each airport. We needed to create a list of values that would bring back the fields that the document collected. The values are ORIGIN, which is the airport, then DEST, FL_DATE, DEP_DELAY, ARR_DELAY, CANCELLED, CANCELLED_STATUS, DIVERTED_STATUS and DELAYED_STATUS. All of the values were selected to 1 to collect the data in those values. The only value excluded was the ID column that would not reveal anything due to the header record.
+Each document would be JSONIFIED once the collection is completed.
+
 
 Then finished the Flask with the name and app run.
 
