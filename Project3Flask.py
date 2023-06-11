@@ -18,7 +18,8 @@ def home():
         f"<h2>Flask app to return API data</h2>"
         f"Available Routes:<br/>"
         f"&nbsp;&nbsp;/LAX_data<br/>"
-        f"&nbsp;&nbsp;/One LAX<br/>"
+        f"&nbsp;&nbsp;/SFO_data<br/>"
+        f"&nbsp;&nbsp;/SAN_data<br/>"
         
     )
 
@@ -37,11 +38,35 @@ def get_document():
     else:
         return "Document not found", 404
 
-# get all data (for good or bad)
+# get all data per Airport
 @app.route('/LAX_data', methods=['GET'])
-def get_all_documents():
+def get_LAX_documents():
     collection = mongo.db.flight_delays
-    documents = [row for row in collection.find({"ORIGIN": "LAX"}, {"ORIGIN": 1, "DEST" : 1, "_id" : 0})]
+    documents = [row for row in collection.find({"ORIGIN": "LAX"}, {"ORIGIN": 1,"DEST":1,"_id":0,"FL_DATE":1,
+                                                                    "DEP_DELAY":1,"ARR_DELAY":1,"CANCELLED":1,"CANCELLED_STATUS":1,
+                                                                    "DIVERTED_STATUS":1,"DELAYED_STATUS":1})]
+    print(type(documents))
+    # documents = [{k:v for k,v in row.items() if k != '_id'} for row in documents]
+    return jsonify(documents)
+
+# get all data per Airport
+@app.route('/SFO_data', methods=['GET'])
+def get_SFO_documents():
+    collection = mongo.db.flight_delays
+    documents = [row for row in collection.find({"ORIGIN": "SFO"}, {"ORIGIN": 1,"DEST":1,"_id":0,"FL_DATE":1,
+                                                                    "DEP_DELAY":1,"ARR_DELAY":1,"CANCELLED":1,"CANCELLED_STATUS":1,
+                                                                    "DIVERTED_STATUS":1,"DELAYED_STATUS":1})]
+    print(type(documents))
+    # documents = [{k:v for k,v in row.items() if k != '_id'} for row in documents]
+    return jsonify(documents)
+
+# get all data per Airport
+@app.route('/SAN_data', methods=['GET'])
+def get_SAN_documents():
+    collection = mongo.db.flight_delays
+    documents = [row for row in collection.find({"ORIGIN": "SAN"}, {"ORIGIN": 1,"DEST":1,"_id":0,"FL_DATE":1,
+                                                                    "DEP_DELAY":1,"ARR_DELAY":1,"CANCELLED":1,"CANCELLED_STATUS":1,
+                                                                    "DIVERTED_STATUS":1,"DELAYED_STATUS":1})]
     print(type(documents))
     # documents = [{k:v for k,v in row.items() if k != '_id'} for row in documents]
     return jsonify(documents)
