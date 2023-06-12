@@ -5,26 +5,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Airline Delays from 2018-2022</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 </head>
 
 <body>
+  <title>Airline Delays from 2018-2022</title>
 
   <div class="container">
     <div class="row">
-      <div class="col-md-4 jumbotron text-center">
+      <div class="col-md-12 jumbotron text-center">
         <h1>Airline Delay Analysis</h1>
         <p>Use the interactive charts below to explore the dataset</p>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-5">
         <div class="well">
           <h5>Select Airline:</h5>
-          <select id="selDataset" onchange="optionChanged(this.value)"></select>
+          <select id="airport-select">
+            <option>LAX</option>
+            <option>SFO</option>
+            <option>SAN</option>
+          </select>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -46,8 +52,9 @@
       </div>
     </div>
   </div>
+
+  <script src="./app.js"></script>
   
-  <script src="./app/app.js"></script>
 </body>
 
 </html>
