@@ -1,105 +1,304 @@
+// Define variables for the airport data
 var LAX_data;
 var SFO_data;
 var SAN_data;
 var selectedAirport = "LAX";
 
 function init() {
-    d3.json("http://127.0.0.1:5000/LAX_data").then(function (data) {
-      LAX_data = data;
-      console.log(LAX_data);
-      // Further code using the LAX data can be placed here
-    });
-  
-    d3.json("http://127.0.0.1:5000/SFO_data").then(function (data) {
-      SFO_data = data;
-      console.log(SFO_data);
-      // Further code using the SFO data can be placed here
-    });
-  
-    d3.json("http://127.0.0.1:5000/SAN_data").then(function (data) {
-      SAN_data = data;
-      console.log(SAN_data);
-      // Further code using the SAN data can be placed here
-    });
-  }
+  // Load the airport data
+  loadAirportData();
+}
 
-// Initialize the selected airport
-var selectedAirport = "LAX";
+// Function to load the airport data
+function loadAirportData() {
+  // Make asynchronous requests to load the airport data
+  d3.json("http://127.0.0.1:5000/LAX_data").then(function (data) {
+    LAX_data = data;
+    console.log(LAX_data);
+    // Call the updateCharts function after loading the data
+    updateCharts(selectedAirport);
+  });
+
+  d3.json("http://127.0.0.1:5000/SFO_data").then(function (data) {
+    SFO_data = data;
+    console.log(SFO_data);
+    // Call the updateCharts function after loading the data
+    updateCharts(selectedAirport);
+  });
+
+  d3.json("http://127.0.0.1:5000/SAN_data").then(function (data) {
+    SAN_data = data;
+    console.log(SAN_data);
+    // Call the updateCharts function after loading the data
+    updateCharts(selectedAirport);
+  });
+}
 
 // Update the selected airport when the dropdown value changes
 d3.select("#airport-select").on("change", function () {
-    selectedAirport = d3.select(this).property("value");
-    updateData(selectedAirport);
-  });
+  selectedAirport = d3.select(this).property("value");
+  updateCharts(selectedAirport);
+});
 
-// Call the updateData function to initialize the chart with the selected airport data
-updateData(selectedAirport);
+// Function to update both the bar chart and line chart based on the selected airport
+function updateCharts(airport) {
+  updateBarChart(airport);
+  updateLineChart(airport);
+}
 
-// Function to update the chart with the selected airport data
-function updateData(airport) {
-    // Extract the delayed flights data by year for the selected airport
-    var data = getDataByYear(getAirportData(airport));
+// Call the updateCharts function to initialize the chart with the selected airport data
+// updateCharts(selectedAirport);
+
+// Function to update the bar chart with the delayed flights data by year
+function updateBarChart(airport) {
+  // Extract the delayed flights data by year for the selected airport
+  var data = getDataByYear(getAirportData(airport));
   
-    // Get the canvas element for the chart
-    var canvas = document.getElementById("bar");
-  
-    // Check if a chart instance already exists on the canvas
-    if (canvas.chart) {
-      // Destroy the existing chart
-      canvas.chart.destroy();
-    }
-  
-    // Create the bar chart using Chart.js
-    var ctx = canvas.getContext("2d");
-    canvas.chart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: data.map(function (d) { return d.year; }),
-        datasets: [{
+  // Extract the delay rate data by year for the selected airport
+  var delayRateData = getDelayRateByYear(getAirportData(airport));
+
+  // Get the canvas element for the bar chart
+  var canvas = document.getElementById("bar");
+
+  // Check if a chart instance already exists on the canvas
+  if (canvas.chart) {
+    // Destroy the existing chart
+    canvas.chart.destroy();
+  }
+
+  // Create the bar chart using Chart.js
+  var ctx = canvas.getContext("2d");
+  canvas.chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: data.map(function (d) {
+        return d.year;
+      }),
+      datasets: [
+        {
           label: "Delayed Flights",
-          data: data.map(function (d) { return d.count; }),
+          data: data.map(function (d) {
+            return d.count;
+          }),
           backgroundColor: "steelblue",
-        }]
-      },
-      options: {
-        scales: {
-          x: {
-            grid: {
-              display: false,
-            },
+        },
+        {
+          label: "Delay Rate",
+          data: delayRateData.map(function (d) {
+            return d.delayRate;
+          }),
+          type: "line",
+          borderColor: "red",
+          borderWidth: 2,
+          fill: false,
+          yAxisID: "rate",
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: {
+          grid: {
+            display: false,
           },
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1,
-            },
+          ticks: {
+            color: "white",
+          },
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: "rgba(255, 255, 255, 0.1)",
+          },
+          ticks: {
+            stepSize: 1,
+            color: "white",
+          },
+        },
+        rate: {
+          position: "right",
+          min: 0,
+          max: 100,
+          grid: {
+            display: false,
+          },
+          ticks: {
+            stepSize: 10,
+            color: "red",
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "Delay Rate (%)",
+            color: "red",
           },
         },
       },
-    });
+      plugins: {
+        legend: {
+          labels: {
+            color: "white",
+          },
+        },
+      },
+    },
+  });
+}
+
+// Function to update the line chart with the average delay data by year
+function updateLineChart(airport) {
+  // Extract the average departure delay data by year for the selected airport
+  var data = getAverageDelayByYear(getAirportData(airport));
+
+  // Get the canvas element for the line chart
+  var canvas = document.getElementById("line");
+
+  // Check if a chart instance already exists on the canvas
+  if (canvas.chart) {
+    // Destroy the existing chart
+    canvas.chart.destroy();
   }
-  
+
+  // Create the line chart using Chart.js
+  var ctx = canvas.getContext("2d");
+  canvas.chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: data.map(function (d) {
+        return d.year;
+      }),
+      datasets: [
+        {
+          label: "Average Departure Delay",
+          data: data.map(function (d) {
+            return d.averageDelay;
+          }),
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+          pointBackgroundColor: "rgba(75, 192, 192, 1)",
+          pointBorderColor: "#fff",
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          ticks: {
+            color: 'white', // Set x-axis tick color to white
+          },
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.1)', // Set y-axis grid color to white with opacity
+          },
+          ticks: {
+            color: 'white', // Set y-axis tick color to white
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            // Add legend label style options
+            color: 'white', // Set legend label font color to white
+          },
+        },
+      },
+    },
+  });
+}
 
 // Function to extract the delayed flights data by year
 function getDataByYear(data) {
-    var delayedData = {};
+  var delayedData = {};
+
+  // Check if data is defined and is an array
+  if (Array.isArray(data)) {
+    data.forEach(function (d) {
+      var year = getYearFromDateString(d.FL_DATE);
+      if (!delayedData[year]) {
+        delayedData[year] = 0;
+      }
+      if (d.DEP_DELAY !== 0) {
+        delayedData[year]++;
+      }
+    });
+  }
+
+  console.log("delayedData:", delayedData); // Log the intermediate result
+
+  var result = Object.keys(delayedData).map(function (year) {
+    return { year: year, count: delayedData[year] };
+  });
+
+  console.log("result:", result); // Log the final result
+
+  return result;
+}
+  
+function getAverageDelayByYear(data) {
+    var averageDelayData = {};
   
     // Check if data is defined and is an array
     if (Array.isArray(data)) {
       data.forEach(function (d) {
         var year = getYearFromDateString(d.FL_DATE);
-        if (!delayedData[year]) {
-          delayedData[year] = 0;
+        if (!averageDelayData[year]) {
+          averageDelayData[year] = { totalDelay: 0, count: 0 };
         }
-        delayedData[year]++;
+        averageDelayData[year].totalDelay += Math.abs(parseFloat(d.DEP_DELAY));
+        averageDelayData[year].count++;
       });
     }
   
-    return Object.keys(delayedData).map(function (year) {
-      return { year: year, count: delayedData[year] };
+    console.log("averageDelayData:", averageDelayData); // Log the intermediate result
+  
+    var result = Object.keys(averageDelayData).map(function (year) {
+      var averageDelay = averageDelayData[year].totalDelay / averageDelayData[year].count;
+      return { year: year, averageDelay: averageDelay };
+    });
+  
+    console.log("result:", result); // Log the final result
+  
+    return result;
+}
+
+function getDelayRateByYear(data) {
+  var delayRateData = {};
+
+  // Check if data is defined and is an array
+  if (Array.isArray(data)) {
+    data.forEach(function (d) {
+      var year = getYearFromDateString(d.FL_DATE);
+      if (!delayRateData[year]) {
+        delayRateData[year] = { totalRecords: 1, totalNonZeroDelays: 0 };
+      } else {
+        delayRateData[year].totalRecords++;
+      }
+      if (d.DEP_DELAY !== 0) {
+        delayRateData[year].totalNonZeroDelays++;
+      }
     });
   }
-  
+
+  console.log("delayRateData:", delayRateData); // Log the intermediate result
+
+  var result = Object.keys(delayRateData).map(function (year) {
+    var delayRate = (delayRateData[year].totalNonZeroDelays / delayRateData[year].totalRecords) * 100;
+    return { year: year, delayRate: delayRate };
+  });
+
+  console.log("result:", result); // Log the final result
+
+  return result;
+}
 
 // Function to get the data for the selected airport
 function getAirportData(airport) {
@@ -120,7 +319,5 @@ function getYearFromDateString(dateString) {
   var date = new Date(dateString);
   return date.getFullYear().toString();
 }
-
-
 
 init();
