@@ -76,13 +76,6 @@ function updateBarChart(airport) {
       }),
       datasets: [
         {
-          label: "Delayed Flights",
-          data: data.map(function (d) {
-            return d.count;
-          }),
-          backgroundColor: "steelblue",
-        },
-        {
           label: "Delay Rate",
           data: delayRateData.map(function (d) {
             return d.delayRate;
@@ -92,6 +85,13 @@ function updateBarChart(airport) {
           borderWidth: 2,
           fill: false,
           yAxisID: "rate",
+        },
+        {
+          label: "Delayed Flights",
+          data: data.map(function (d) {
+            return d.count;
+          }),
+          backgroundColor: "steelblue",
         },
       ],
     },
@@ -226,7 +226,7 @@ function getDataByYear(data) {
       if (!delayedData[year]) {
         delayedData[year] = 0;
       }
-      if (d.DEP_DELAY !== 0) {
+      if (d.DELAYED_STATUS === "1") {
         delayedData[year]++;
       }
     });
@@ -244,30 +244,36 @@ function getDataByYear(data) {
 }
   
 function getAverageDelayByYear(data) {
-    var averageDelayData = {};
-  
-    // Check if data is defined and is an array
-    if (Array.isArray(data)) {
-      data.forEach(function (d) {
-        var year = getYearFromDateString(d.FL_DATE);
-        if (!averageDelayData[year]) {
-          averageDelayData[year] = { totalDelay: 0, count: 0 };
-        }
-        averageDelayData[year].totalDelay += Math.abs(parseFloat(d.DEP_DELAY));
+  var averageDelayData = {};
+
+  // Check if data is defined and is an array
+  if (Array.isArray(data)) {
+    data.forEach(function (d) {
+      var year = getYearFromDateString(d.FL_DATE);
+      if (!averageDelayData[year]) {
+        averageDelayData[year] = { totalDelay: 0, count: 0 };
+      }
+      var depDelay = parseInt(d.DEP_DELAY);
+      if (!isNaN(depDelay)) { // Check if depDelay is a valid number
+        averageDelayData[year].totalDelay += Math.abs(depDelay);
         averageDelayData[year].count++;
-      });
-    }
-  
-    console.log("averageDelayData:", averageDelayData); // Log the intermediate result
-  
-    var result = Object.keys(averageDelayData).map(function (year) {
-      var averageDelay = averageDelayData[year].totalDelay / averageDelayData[year].count;
-      return { year: year, averageDelay: averageDelay };
+
+        // Modify the DEP_DELAY value in the original array
+        d.DEP_DELAY = depDelay;
+      }
     });
-  
-    console.log("result:", result); // Log the final result
-  
-    return result;
+  }
+
+  console.log("averageDelayData:", averageDelayData); // Log the intermediate result
+
+  var result = Object.keys(averageDelayData).map(function (year) {
+    var averageDelay = averageDelayData[year].totalDelay / averageDelayData[year].count;
+    return { year: year, averageDelay: averageDelay };
+  });
+
+  console.log("result:", result); // Log the final result
+
+  return result;
 }
 
 function getDelayRateByYear(data) {
@@ -278,12 +284,11 @@ function getDelayRateByYear(data) {
     data.forEach(function (d) {
       var year = getYearFromDateString(d.FL_DATE);
       if (!delayRateData[year]) {
-        delayRateData[year] = { totalRecords: 1, totalNonZeroDelays: 0 };
-      } else {
-        delayRateData[year].totalRecords++;
+        delayRateData[year] = { totalRecords: 0, totalDelays: 0 };
       }
-      if (d.DEP_DELAY !== 0) {
-        delayRateData[year].totalNonZeroDelays++;
+      delayRateData[year].totalRecords++;
+      if (d.DELAYED_STATUS === "1") {
+        delayRateData[year].totalDelays++;
       }
     });
   }
@@ -291,7 +296,7 @@ function getDelayRateByYear(data) {
   console.log("delayRateData:", delayRateData); // Log the intermediate result
 
   var result = Object.keys(delayRateData).map(function (year) {
-    var delayRate = (delayRateData[year].totalNonZeroDelays / delayRateData[year].totalRecords) * 100;
+    var delayRate = (delayRateData[year].totalDelays / delayRateData[year].totalRecords) * 100;
     return { year: year, delayRate: delayRate };
   });
 
