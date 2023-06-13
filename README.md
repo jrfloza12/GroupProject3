@@ -9,7 +9,7 @@ Project Description:
 How much has our travel time changed in the last few years?
 With the slowdown of travel during and the increase after COVID, how much did it impact this option for travel?
 In this project, we want to gather information from some of the most popular airports from one of the more populated states and visualize what happened over time.
-The centerpieces of the information are the Delays, Cancellations, and Diversions that would make anyone “angrier than the Keebler Elf demoted to fudge packer.” (L. Cable Guy)
+The centerpieces of the information are the Delays that would make anyone “Angrier than the Keebler Elf demoted to fudge packer.” (L. Cable Guy)
 The three major Airlines are Los Angeles, San Francisco, and San Diego, California, with their respective LAX, SFO, and SAN airport codes.
 
 
@@ -21,9 +21,9 @@ We collected the data from the following site <a href="https://data.bts.gov/" ta
 
 The greatest challenge with the CSV file was the amount of data it contained since we could not filter it by the airlines selected prior to this. Due to this obstacle, and the amount of data that was allowed, we downloaded four separate csv files by year.  [2018 csv](T_ONTIME_MARKETING_2018.csv), [2019 csv](T_ONTIME_MARKETING_2019.csv), [2020 csv](T_ONTIME_MARKETING_2020.csv), [2022 csv](T_ONTIME_MARKETING_2022.csv) 
 
-We decided to go with one month (December) of each year for all of the fiight departing out of those three airports. This still created a CSV with over one million rows. 
+We decided to go with one month (December) of each year for all of the fiight departing out of those three airports. Even with this limited source it contained a CSV file with over a million rows of information. 
 
-We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO.
+We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO as a reference column.
 
 The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](merged-csv-files-edited.csv)
 
@@ -43,13 +43,10 @@ The imports necessary to make the code work were the following:
 • Flask Pymongo to communicate with our database where Flight information is located.
 
 After the imports, we created the app by assigning the app to Flask (__name__) and then included CORS(app).
-
 As mentioned before, the Mongo database was selected and used to configure the API.config by assigning Mongo to Pymongo(app).
 
 Our API start point was the app.route, defined as a home with the response/ available routes as the LAX, SFO, and SAN data.
-
 With our teacher's contribution, we created a code that collected the key values in the rows of the Mongo data and defined it as a get_document.
-
 If the document found the key values of the selected airport, it would return a unified document. We decided to create one API for each airport. We needed to create a list of values that would bring back the fields that the document collected. The values are ORIGIN, which is the airport, then DEST, FL_DATE, DEP_DELAY, ARR_DELAY, CANCELLED, CANCELLED_STATUS, DIVERTED_STATUS and DELAYED_STATUS. All of the values were selected to 1 to collect the data in those values. The only value excluded was the ID column that would not reveal anything due to the header record.
 Each document would be JSONIFIED once the collection is completed.
 
