@@ -1,5 +1,10 @@
 # README_Project3
 
+![image](https://github.com/jrfloza12/GroupProject3/assets/122821004/ef7fe1a2-41ec-41f4-8198-053ddd448274)
+
+
+
+
 Project Description: 
 How much has our travel time changed in the last few years?
 With the slowdown of travel during and the increase after COVID, how much did it impact this option for travel?
@@ -12,20 +17,19 @@ The three major Airlines are Los Angeles, San Francisco, and San Diego, Californ
 To acquire and interpret the data we had to chart the following “ ”steps:
 
 ### Step 1: ETL
+We collected the data from the following site <a href="https://data.bts.gov/" target="_blank">Bureau of Transportation statistics</a>. The site had the ability to download a csv file which we were able to create our initial  dataframe.
 
-We collected the data from the following site “Bureau of Transportation statistics” (transtats.bts.gov). The site had the ability to download a csv file which we were able to create our initial  dataframe.
-
-The greatest challenge with the CSV file was the amount of data it contained since we could not filter it by the airlines selected prior to this. Due to this obstacle, and the amount of data that was allowed, we downloaded four separate csv files by year.  `T_ONTIME_MARKETING_2018.csv`, `T_ONTIME_MARKETING_2019.csv`, `T_ONTIME_MARKETING_2020.csv`, `T_ONTIME_MARKETING_2022.csv` 
+The greatest challenge with the CSV file was the amount of data it contained since we could not filter it by the airlines selected prior to this. Due to this obstacle, and the amount of data that was allowed, we downloaded four separate csv files by year.  [2018 csv](T_ONTIME_MARKETING_2018.csv), [2019 csv](T_ONTIME_MARKETING_2019.csv), [2020 csv](T_ONTIME_MARKETING_2020.csv), [2022 csv](T_ONTIME_MARKETING_2022.csv) 
 
 We decided to go with one month (December) of each year for all of the fiight departing out of those three airports. This still created a CSV with over one million rows. 
 
 We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO.
 
-The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  `Merged-csv-files.csv`
+The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](merged-csv-files-2.csv)
 
 Once we had merged the data the next step was finish clean up and merge it into MongoDB.
 
-Using Jupyter Notebook and the Pandas module, we created the data frame flightdelays_df from the merged CSV file. We manipulated the data by turning the YES and NOs into 1s and 0s. Pandas also allowed us to create a list of dictionaries for an easy transition into Mongo Db as a collection of documents. We also cleaned the data by scrubbing blank or NA columns. This allowed us to get as much condensed and accurate information as possible into the Mongo Data Base. `Project3ELT.ipynb`
+Using Jupyter Notebook and the Pandas module, we created the data frame flightdelays_df from the merged CSV file. We manipulated the data by turning the YES and NOs into 1s and 0s. Pandas also allowed us to create a list of dictionaries for an easy transition into Mongo Db as a collection} of documents. We also cleaned the data by scrubbing blank or NA columns. This allowed us to get as much condensed and accurate information as possible into the Mongo Data Base. [Jupyter Notebook File](Project3ELT.ipynb)
 
 We selected Mongo due to its versality with JSON and the visualizations that we require for this assignment.
 
@@ -46,53 +50,31 @@ Our API start point was the app.route, defined as a home with the response/ avai
 
 With our teacher's contribution, we created a code that collected the key values in the rows of the Mongo data and defined it as a get_document.
 
-If the document found the key values of the selected airport, it would return a unified document. We decided to create one API for each airport.
-
-The finished the Flask with the name and app run.
-
-``Project3Flask.py`
+If the document found the key values of the selected airport, it would return a unified document. We decided to create one API for each airport. We needed to create a list of values that would bring back the fields that the document collected. The values are ORIGIN, which is the airport, then DEST, FL_DATE, DEP_DELAY, ARR_DELAY, CANCELLED, CANCELLED_STATUS, DIVERTED_STATUS and DELAYED_STATUS. All of the values were selected to 1 to collect the data in those values. The only value excluded was the ID column that would not reveal anything due to the header record.
+Each document would be JSONIFIED once the collection is completed.
 
 
+Then finished the Flask with the name and app run.
 
-# We need to flesh out the last parts. FL
+[Flask App](Project3Flask.py)
 
-### Step 3: HTML and Javascript app
 
-This is where you should be spending most of your time, since this is where the user interactivity and visualizations should be; if you have other ideas, please see me.  It illustrates how to use D3 to navigate the DOM to get access to a button and handle a click event which adds a plot to the DOM.  I didn't start with an initial plot, just so that I could show interactivity by forcing a button click to show the interaction.  I also didn't provide any CSS styling to keep the example simple.
+### Step 3: HTML and Javascript app </br>
+</br>
 
-### Steps to run
+The final piece was to create an HTML boilerplate and a dynamic javascript.
 
-First, you will need two terminal (or Git bash) windows running.  In the first window, from the directory where you have your Flask app, you need to run the Flask app.  Here is my example:
-``` bash
+HTML:
 
-$ python Step2_Flask_API_Server.py * Serving Flask app 'Step2_Flask_API_Server'
- * Debug mode: on
-   WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-   Press CTRL+C to quit
- * Restarting with watchdog (windowsapi)
- * Debugger is active!
- * Debugger PIN: 106-222-758`
-```
+The index.html file used one css library called a Bootstrap to organize the location of the charts.  It is also used two js libraries, d3.js, and chart.js.  The d3.js is used to modify the DOM and to read the JSON pulled from of, and chart.js is used to create the graphs within the canvas element of the HMTL. 
 
-Notice that the Flask app is running on `localhost:5000`, which is where we are reading the data from via the API call to the `/data` endpoint.
+Javascript:
 
-In the second window, navigate to where the `index.html` file is for your Javascript front-end visualizations and run the Python simple HTTP server with the command `python -m http.server`.  Here is my example:
+The app.js javascript is broken into three main parts.  The first part queries the Flask app endpoint to retrieve the desired data from MongoDB.  The second part refines the data and creates arrays that will be used by the last part, which are the charts.  There are two charts that dynamically change based on the selection of a drop-down list.  
 
-```bash
-(base)
-coach@ENERGYROX1 MINGW64 ~/projects/mock_project3/Step3_Javascript
-$ python -m http.server
-Serving HTTP on :: port 8000 (http://[::]:8000/) ...
-```
+The visualization presented when accessing the webpage shows departure delays, delay rate, and average delay for that airport over four years.  The drop-down selection is of the three airports mentioned above: LAX, SFO, and SAN. 
 
-You should now be able to go to a local browser and type:
+We hope you enjoy our product. 
 
-```url
-http://localhost:8000
-```
 
-... to see your visualizations!
 
-Good luck!
-v
