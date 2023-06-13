@@ -65,41 +65,7 @@ Then finished the Flask with the name and app run.
 
 ### Step 3: HTML and Javascript app
 
-This is where you should be spending most of your time, since this is where the user interactivity and visualizations should be; if you have other ideas, please see me.  It illustrates how to use D3 to navigate the DOM to get access to a button and handle a click event which adds a plot to the DOM.  I didn't start with an initial plot, just so that I could show interactivity by forcing a button click to show the interaction.  I also didn't provide any CSS styling to keep the example simple.
+
 
 ### Steps to run
 
-First, you will need two terminal (or Git bash) windows running.  In the first window, from the directory where you have your Flask app, you need to run the Flask app.  Here is my example:
-``` bash
-
-$ python Step2_Flask_API_Server.py * Serving Flask app 'Step2_Flask_API_Server'
- * Debug mode: on
-   WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-   Press CTRL+C to quit
- * Restarting with watchdog (windowsapi)
- * Debugger is active!
- * Debugger PIN: 106-222-758`
-```
-
-Notice that the Flask app is running on `localhost:5000`, which is where we are reading the data from via the API call to the `/data` endpoint.
-
-In the second window, navigate to where the `index.html` file is for your Javascript front-end visualizations and run the Python simple HTTP server with the command `python -m http.server`.  Here is my example:
-
-```bash
-(base)
-coach@ENERGYROX1 MINGW64 ~/projects/mock_project3/Step3_Javascript
-$ python -m http.server
-Serving HTTP on :: port 8000 (http://[::]:8000/) ...
-```
-
-You should now be able to go to a local browser and type:
-
-```url
-http://localhost:8000
-```
-
-... to see your visualizations!
-
-Good luck!
-v
