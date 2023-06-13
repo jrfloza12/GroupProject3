@@ -25,11 +25,11 @@ We decided to go with one month (December) of each year for all of the fiight de
 
 We added three addtional columns DELAYED_STATUS, CANCELLED_STATUS, AND DIVERTED_STATUS, with either a YES or NO.
 
-The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](merged-csv-files-2.csv)
+The next step was to merge the data. Using the command prompt, we selected the CSV files and used the command: “copy*.csv merged-csv-files.csv” to create a new file with all of them merged.  [Merged csv](merged-csv-files-edited.csv)
 
 Once we had merged the data the next step was finish clean up and merge it into MongoDB.
 
-Using Jupyter Notebook and the Pandas module, we created the data frame flightdelays_df from the merged CSV file. We manipulated the data by turning the YES and NOs into 1s and 0s. Pandas also allowed us to create a list of dictionaries for an easy transition into Mongo Db as a collection} of documents. We also cleaned the data by scrubbing blank or NA columns. This allowed us to get as much condensed and accurate information as possible into the Mongo Data Base. [Jupyter Notebook File](Project3ELT.ipynb)
+Using Jupyter Notebook and the Pandas module, we created the data frame flightdelays_df from the merged CSV file. We manipulated the data by turning the YES and NOs into 1s and 0s. Pandas also allowed us to create a list of dictionaries for an easy transition into Mongo Db as a collection} of documents. We also cleaned the data by scrubbing blank or NA columns. This allowed us to get as much condensed and accurate information as possible into the Mongo Data Base. [Jupyter Notebook File](Project3ETL.ipynb)
 
 We selected Mongo due to its versality with JSON and the visualizations that we require for this assignment.
 
