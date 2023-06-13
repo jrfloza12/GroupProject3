@@ -75,6 +75,7 @@ The visualization presented when accessing the webpage shows departure delays, d
 
 [Index HTML](app/index.html)
 
+This project was very difficult and required plenty of hours as well as constant modifications. With more time and data samples, this analysis could cover a broader scope of the Flight Time Performance.
 
 We hope you enjoy our product. 
 
