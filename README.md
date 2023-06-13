@@ -74,6 +74,8 @@ The app.js javascript is broken into three main parts.  The first part queries t
 
 The visualization presented when accessing the webpage shows departure delays, delay rate, and average delay for that airport over four years.  The drop-down selection is of the three airports mentioned above: LAX, SFO, and SAN. 
 
+[APP.JS](app.js) 
+[Index HTML](index.html)
 We hope you enjoy our product. 
 
 
