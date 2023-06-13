@@ -61,8 +61,6 @@ Then finished the Flask with the name and app run.
 
 
 
-# We need to flesh out the last parts. FL
-
 ### Step 3: HTML and Javascript app
 
 
